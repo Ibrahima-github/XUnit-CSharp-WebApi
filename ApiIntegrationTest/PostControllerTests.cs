@@ -32,7 +32,7 @@ namespace ApiIntegrationTest
                     PostDescription = "Ceci est un post",
                     PostName = "Test post",
                     PostYoutubeHref = "https://www.youtube.com",
-                    PostId = 1
+                    PostId = 3,
                 });
                 ctx.SaveChanges();
             }
