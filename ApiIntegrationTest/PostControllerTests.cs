@@ -15,8 +15,9 @@ namespace ApiIntegrationTest
     {
         protected readonly IConfiguration _configuration;
         protected readonly IWebHostEnvironment _env;
+        
         [Fact]
-        public void PostsController_PostsFromDatabase()
+        public void PostsController_GetPostsFromDatabase()
         {
             DbContextOptionsBuilder<BlogDBContext> optionsBuilder = new();
             optionsBuilder.UseInMemoryDatabase(MethodBase.GetCurrentMethod().Name);
@@ -32,7 +33,7 @@ namespace ApiIntegrationTest
                     PostDescription = "Ceci est un post",
                     PostName = "Test post",
                     PostYoutubeHref = "https://www.youtube.com",
-                    PostId = 3,
+                    PostId = 1,
                 });
                 ctx.SaveChanges();
             }
@@ -58,6 +59,42 @@ namespace ApiIntegrationTest
             Assert.Equal("Affiliation", post.AdsTitle);
             Assert.Equal("anonymous.png", post.AdsImageFileName);
             Assert.Equal("https://www.crypto.com", post.AdsLink);
+        }
+
+        [Fact]
+        public void PostsController_PostsFromDatabase()
+        {
+            DbContextOptionsBuilder<BlogDBContext> optionsBuilder = new();
+            optionsBuilder.UseInMemoryDatabase(MethodBase.GetCurrentMethod().Name);
+
+            JsonResult result;
+            using (BlogDBContext ctx = new BlogDBContext(optionsBuilder.Options))
+            {
+
+
+                result = new PostsController(_configuration, _env, ctx).PostAsync( new Post
+                {
+                    AdsImageFileName = "anonymous.png",
+                    AdsLink = "https://www.crypto.com",
+                    AdsTitle = "Affiliation",
+                    Category = "Informatique",
+                    PostDescription = "Ceci est un post",
+                    PostName = "Test post",
+                    PostYoutubeHref = "https://www.youtube.com",
+                    PostId = 3,
+                });
+
+
+
+            }
+            var JsonResult = Assert.IsType<JsonResult>(result);
+
+            var postResultat = Assert.IsType<String>(JsonResult.Value);
+
+            Assert.NotNull(postResultat);
+
+            Assert.Equal("Added successfully", postResultat.ToString());
+
         }
     }
 }
