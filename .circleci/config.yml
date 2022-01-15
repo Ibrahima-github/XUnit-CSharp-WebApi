@@ -12,7 +12,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - dotnet-packages-v1-{{ checksum "XUnit-Circle-CI-WebApi-development/CSharp-WebApi/WebAPI.csproj" }}
+            - dotnet-packages-v1-{{ checksum "WebAPI.csproj" }}
       - run:
           name: "Install project dependencies"
           command: dotnet.exe restore
